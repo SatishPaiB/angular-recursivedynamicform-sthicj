@@ -1,0 +1,37 @@
+<form [formGroup]="myForm">
+
+  <div class="form-group">
+
+
+    <ng-template #nodeTemplateRef let-node>
+
+      <div class="node">
+        <div  *ngIf="node.children.length">
+          {{"section [formGroupName]="}} {{ getNodeKey(node) }}
+          <section style="display:block;margin:20px;border:solid 1px blue;padding-bottom: 5px;">
+            <h1>{{ node.key }}</h1>
+            <ng-template
+              ngFor
+              [ngForOf]="node.children"
+              [ngForTemplate]="nodeTemplateRef"> 
+            </ng-template>
+          </section>
+          {{"end of section"}}
+        </div>
+        <div  *ngIf="!node.children.length">
+          <label [for]="node.key">{{node.key}}</label>&nbsp;
+          <input  type="text"  [formControl]="myForm.get(node.fullKey)"
+                  class="form-control">
+        </div>
+      </div>
+
+    </ng-template>
+    
+    <ng-template *ngFor="let myKey of myKeys"
+                 [ngTemplateOutlet]="nodeTemplateRef"
+                 [ngTemplateOutletContext]="{ $implicit: myKey   }">
+    </ng-template>
+
+  </div>
+
+</form>
